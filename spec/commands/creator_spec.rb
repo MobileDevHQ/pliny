@@ -34,7 +34,7 @@ describe Pliny::Commands::Creator do
       db_url = File.read("./foobar/.env.sample").split("\n").detect do |line|
         line.include?("DATABASE_URL=")
       end
-      assert_equal "DATABASE_URL=postgres:///foobar-development", db_url
+      assert_equal "DATABASE_URL=mysql2:///foobar-development", db_url
     end
 
     it "changes DATABASE_URL in .env.test to use the app name" do
@@ -42,7 +42,7 @@ describe Pliny::Commands::Creator do
       db_url = File.read("./foobar/.env.test").split("\n").detect do |line|
         line.include?("DATABASE_URL=")
       end
-      assert_equal "DATABASE_URL=postgres:///foobar-test", db_url
+      assert_equal "DATABASE_URL=mysql2:///foobar-test", db_url
     end
 
     it "changes APP_NAME in app.json to use the app name" do

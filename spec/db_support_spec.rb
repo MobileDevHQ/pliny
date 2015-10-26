@@ -18,16 +18,16 @@ describe Pliny::DbSupport do
   end
 
   describe ".admin_url" do
-    it "connects to the postgres system's db" do
-      assert_equal "postgres://1.2.3.4/postgres",
-        Pliny::DbSupport.admin_url("postgres://1.2.3.4/my-db")
+    it "connects to the mysql2 system's db" do
+      assert_equal "mysql2://1.2.3.4/",
+        Pliny::DbSupport.admin_url("mysql2://1.2.3.4/my-db")
     end
   end
 
   describe ".setup?" do
     it "checks if the database is responsive" do
       assert_equal true, Pliny::DbSupport.setup?(url)
-      assert_equal false, Pliny::DbSupport.setup?("postgres://localhost/does-not-exist")
+      assert_equal false, Pliny::DbSupport.setup?("mysql2://localhost/does-not-exist")
     end
   end
 
@@ -39,7 +39,7 @@ describe Pliny::DbSupport do
             change do
               create_table(:foo) do
                 primary_key :id
-                text        :bar
+                String      :bar
               end
             end
           end
@@ -58,11 +58,27 @@ describe Pliny::DbSupport do
     before do
       @t = Time.now
       File.open("#{@path}/db/migrate/#{(@t-2).to_i}_first.rb", "w") do |f|
-        f.puts "Sequel.migration { change { create_table(:first) } }"
+        f.puts "
+          Sequel.migration do
+            change do
+              create_table(:first) do
+                primary_key :id
+              end
+            end
+          end
+        "
       end
 
       File.open("#{@path}/db/migrate/#{(@t-1).to_i}_second.rb", "w") do |f|
-        f.puts "Sequel.migration { change { create_table(:second) } }"
+        f.puts "
+          Sequel.migration do
+            change do
+              create_table(:second) do
+                primary_key :id
+              end
+            end
+          end
+        "
       end
     end
 

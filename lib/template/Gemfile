@@ -4,7 +4,11 @@ ruby "2.2.3"
 gem "multi_json"
 gem "oj"
 gem "pg"
+<<<<<<< HEAD
 gem "pliny", "~> 0.15"
+=======
+gem "pliny", git: "git@github.com:MobileDevHQ/pliny.git"
+>>>>>>> make work with mysql
 gem "pry"
 gem "puma", "~> 2.10"
 gem "rack-ssl"
@@ -14,6 +18,8 @@ gem "rollbar", require: "rollbar/middleware/sinatra"
 gem "sequel", "~> 4.16"
 gem "sequel-paranoid"
 gem "sequel_pg", "~> 1.6", require: "sequel"
+gem "mysql2", "~> 0.4.0"
+
 gem "sinatra", "~> 1.4", require: "sinatra/base"
 gem "sinatra-contrib", require: ["sinatra/namespace", "sinatra/reloader"]
 gem "sinatra-router"

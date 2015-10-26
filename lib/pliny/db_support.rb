@@ -6,7 +6,7 @@ module Pliny
   class DbSupport
     def self.admin_url(database_url)
       uri = URI.parse(database_url)
-      uri.path = "/postgres"
+      uri.path = "/"
       uri.to_s
     end
 
@@ -36,16 +36,16 @@ module Pliny
     end
 
     def exists?(name)
-      res = db.fetch("SELECT 1 FROM pg_database WHERE datname = ?", name)
+      res = db.fetch("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?", name)
       return res.count > 0
     end
 
     def create(name)
-      db.run(%{CREATE DATABASE "#{name}"})
+      db.run("CREATE DATABASE `#{name}`")
     end
 
     def migrate(target=nil)
-      Sequel::Migrator.apply(db, "./db/migrate", target)
+      test = Sequel::Migrator.apply(db, "./db/migrate", target)
     end
 
     def rollback

@@ -66,7 +66,7 @@ begin
         admin_url = Pliny::DbSupport.admin_url(database_url)
         db = Sequel.connect(admin_url)
         name = name_from_uri(database_url)
-        db.run(%{DROP DATABASE IF EXISTS "#{name}"})
+        db.run("DROP DATABASE IF EXISTS `#{name}`")
         puts "Dropped `#{name}`"
       end
       disconnect
@@ -92,7 +92,8 @@ begin
       task :dump do
         file = File.join("db", "schema.sql")
         database_url = database_urls.first
-        `pg_dump -s -x -O -f #{file} #{database_url}`
+        uri = URI(database_url)
+        `mysqldump -u #{uri.user} -p #{uri.password} -h #{uri.host} --no-data #{uri.path.gsub("/", "")} > #{file}`
 
         schema = File.read(file)
         # filter all COMMENT ON EXTENSION, only owners and the db
